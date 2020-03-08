@@ -4,9 +4,16 @@
  * and open the template in the editor.
  */
 package vehiclehireapp;
+
 import au.edu.swin.vehicle.Vehicle;
 import au.edu.swin.vehicle.VehicleType;
 import java.util.ArrayList;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,13 +44,62 @@ public class VehicleHireApp {
         for (Vehicle vehicle : vehicles) {
             System.out.println(vehicle);
         }
-        String typeCode = args[0];
+        String typeCode = "NuLl"; //Here is our variable to be changed
+        typeCode = chooseCarMenu();
         System.out.println("\n\nList of vehicle of type " + typeCode);
         for (Vehicle vehicle : vehicles) {
             if (vehicle.getType().getCode().equals(typeCode)) {
                 System.out.println(vehicle);
             }
         }
+
+    }
+
+    enum VehicleEnum {
+        DEFAULT,
+        SEDAN,
+        LIMO6,
+        LIMO8
+    }
+
+    public static String chooseCarMenu() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String chosenType;
+        VehicleEnum vEnum = VehicleEnum.DEFAULT;
+        chosenType = "test";
+
+        System.out.println("Here are the following cars avaiable \n");
+        System.out.println(" 1: SEDAN \n 2: LIMO6 \n 3: LIMO8 \n 4: Exit \n");
+
+        System.out.println("Please select one of the above options(1-4): ");
+
+        String userInput = "null";
+        int i = 0;
+        try {
+            userInput = br.readLine();
+            i = Integer.parseInt(userInput);
+            if (i >= 1 && i < 4) {
+                vEnum = VehicleEnum.values()[i];
+            }
+            else if(i == 4){
+                System.out.println("You have chosen to EXIT by choosing 4");
+                vEnum = VehicleEnum.values()[0];
+            }
+            else {
+                System.out.println("I did not understand your input");
+                vEnum = VehicleEnum.values()[0];
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(VehicleHireApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //int i = System.in.read();
+       // System.out.println("String: {} Integer: {} Type: {}".format(userInput, i, vEnum));
+
+        //System.out.println("Test: {}".format(vEnum.toString()));
+        
+        return vEnum.toString();
     }
 
 }
