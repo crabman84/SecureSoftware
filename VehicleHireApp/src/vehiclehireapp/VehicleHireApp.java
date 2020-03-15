@@ -93,13 +93,6 @@ public class VehicleHireApp {
         } catch (IOException ex) {
             Logger.getLogger(VehicleHireApp.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        //int i = System.in.read();
-       // System.out.println("String: {} Integer: {} Type: {}".format(userInput, i, vEnum));
-
-        //System.out.println("Test: {}".format(vEnum.toString()));
-        
         return vEnum.toString();
     }
-
 }
