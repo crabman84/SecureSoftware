@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author luke
  */
-public class SetUpMyUSer {
+public class SetUpMyUser {
 
     /**
      * @param args the command line arguments
@@ -20,15 +20,28 @@ public class SetUpMyUSer {
         // TODO code application logic here
         MyDB mydb = new MyDB();
         /*
-* drop table first for a clean start
-* may cause error if table does not exist
+            * drop table first for a clean start
+            * may cause error if table does not exist
          */
         mydb.dropMyuserTable();
         mydb.createMyuserTable();
+        
+//        TODO: Complete Lab02
+        //Add array of records
         ArrayList<Myuser> aList = prepareMyuserData();
         mydb.addRecords(aList);
         
+//        TODO: P2.1 Task 2.1 
+//      Add a single record
+        Myuser aMyuser = prepareSingleMyuserData();
+        mydb.createRecord(aMyuser);
         
+//        TODO: P2.1 Task 2.2
+//      Get a single record with userId
+        String aUserId = "00003";
+        
+        mydb.getRecord(aUserId);
+
         //TODO: P2.1 Task 3 
         //Make client program
         
@@ -37,7 +50,16 @@ public class SetUpMyUSer {
         //END: P2.1 Task 3
         //
     }
-
+//        TODO: P2.1 Task 2.1
+    public static Myuser prepareSingleMyuserData() {
+    Myuser lMyuser = new Myuser("000007", "Testie McTester", "987654",
+            "test@swin.edu.au", "0418926318", "Swinburne Test",
+                "What is my Test?", "To work in database");
+    
+        return lMyuser;
+    }
+    
+//        TODO: P2.1 Task 1
     public static ArrayList<Myuser> prepareMyuserData() {
         ArrayList<Myuser> myList = new ArrayList<Myuser>();
         

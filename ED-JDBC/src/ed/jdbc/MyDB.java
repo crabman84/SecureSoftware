@@ -137,13 +137,103 @@ public class MyDB {
             }
         }
     }
+    
     //TODO: P2.1 task 2
-    public boolean createRecord(Myuser myuser) {
-        return false;
+    public boolean createRecord(Myuser pMyuser) {
+        Connection lCnnct = null;
+        PreparedStatement  lPreStmnt = null;
+        boolean lRecordAlreadyExists = false;
+        try{
+            lCnnct = getConnection();
+            String lPreQueryStatement = "INSERT INTO MYUSER VALUES(?, ?, ?, ?, ?, ?, ?, ? )";
+            lPreStmnt = lCnnct.prepareStatement(lPreQueryStatement);
+            
+            lPreStmnt.setString(1, pMyuser.getUserid());
+            lPreStmnt.setString(2, pMyuser.getName());
+            lPreStmnt.setString(3, pMyuser.getPassword());
+            lPreStmnt.setString(4, pMyuser.getEmail());
+            lPreStmnt.setString(5, pMyuser.getPhone());
+            lPreStmnt.setString(6, pMyuser.getAddress());
+            lPreStmnt.setString(7, pMyuser.getSecQn());
+            lPreStmnt.setString(8, pMyuser.getSecAns());
+            
+            int lRowCount = lPreStmnt.executeUpdate();
+                if (lRowCount == 0) {
+                    throw new SQLException("Cannot insert records!");
+                }
+                
+            lRecordAlreadyExists = true;
+        }
+        catch(SQLException ex){
+            while(ex != null){
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        }
+        catch(IOException ex){
+            ex.printStackTrace();
+        }
+        finally{
+            if(lPreStmnt != null){
+                try{
+                    lPreStmnt.close();
+                    return lRecordAlreadyExists;
+                }
+                catch(SQLException e){
+                }
+            }
+        }
+////        Should the below line exist??? I don't think so
+        return lRecordAlreadyExists;
     }
     
-    public Myuser getRecord(String userId) {
+    public Myuser getRecord(String pUserId) {
+        Myuser lMyuser = null;
+        Connection lCnnct = null;
+        Statement lStmnt = null;
+        //OR
+        PreparedStatement lPreStmnt = null;
         
+        
+        try{
+            lCnnct = getConnection();
+            
+            System.out.println("\n test before getRecord() execution");
+            
+            //Normal Statement
+            lStmnt = lCnnct.createStatement();
+            lStmnt.execute("SELECT * FROM TABLE MYUSER WHERE USERID = 000001");
+            
+            //OR PreparedStatement
+            String lPreQueryStatement = ("SELECT * FROM TABLE MYUSER WHERE USERID = 000001");
+            lPreStmnt = lCnnct.prepareStatement(lPreQueryStatement);
+        }
+        catch(SQLException ex){
+            while(ex != null){
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        }
+        catch(IOException ex){
+            ex.printStackTrace();
+        }
+        finally{
+            if(lStmnt != null){
+                try{
+                    lStmnt.close();
+                }
+                catch(SQLException ex){
+                }
+            }
+            if(lCnnct != null){
+                try{
+                    lCnnct.close();
+                }
+                catch(SQLException ex){
+                }
+            }
+        }
+        return lMyuser;
     }
     
     public boolean updateRecord(Myuser myuser){
@@ -154,6 +244,4 @@ public class MyDB {
         return false;
     }
     //END: P2.1 task 2
-    
-    
 }

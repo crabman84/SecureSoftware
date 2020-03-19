@@ -92,7 +92,5 @@ public class Myuser {
 
     public void setSecAns(String secAns) {
         this.secAns = secAns;
-    }
-    
-        
+    }        
 }
