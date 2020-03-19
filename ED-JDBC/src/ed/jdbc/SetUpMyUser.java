@@ -40,7 +40,19 @@ public class SetUpMyUser {
 //      Get a single record with userId
         String aUserId = "00003";
         mydb.getRecord(aUserId);
-
+        
+//        TODO: P2.1 Task 2.3
+//      Update a single record with userId
+        Myuser aUpdateMyuser = prepareUpdateForSingleMyuserData();
+        boolean checkUpdate = mydb.updateRecord(aUpdateMyuser);
+        System.out.print("\n Updated?:  " + checkUpdate);
+        
+        //        TODO: P2.1 Task 2.4
+//      Delete a single record with userId
+        aUserId = "000001";
+        boolean checkDelete = mydb.deleteRecord(aUserId);
+        System.out.print("\n Deleted?:  " + checkDelete + "\n");
+        
         //TODO: P2.1 Task 3 
         //Make client program
         
@@ -54,6 +66,15 @@ public class SetUpMyUser {
     Myuser lMyuser = new Myuser("000007", "Testie McTester", "987654",
             "test@swin.edu.au", "0418926318", "Swinburne Test",
                 "What is my Test?", "To work in database");
+    
+        return lMyuser;
+    }
+    
+    //        TODO: P2.1 Task 2.3
+    public static Myuser prepareUpdateForSingleMyuserData() {
+    Myuser lMyuser = new Myuser("000007", "Testie McUpdater", "456789",
+            "updated@swin.edu.au", "0418926318", "Swinburne Update",
+                "What is my Test?", "To update record database");
     
         return lMyuser;
     }

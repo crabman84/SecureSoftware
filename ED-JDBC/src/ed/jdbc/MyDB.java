@@ -111,6 +111,8 @@ public class MyDB {
                 pStmnt.setString(6, myuser.getAddress());
                 pStmnt.setString(7, myuser.getSecQn());
                 pStmnt.setString(8, myuser.getSecAns());
+                
+                
                 int rowCount = pStmnt.executeUpdate();
                 if (rowCount == 0) {
                     throw new SQLException("Cannot insert records!");
@@ -159,9 +161,9 @@ public class MyDB {
             lPreStmnt.setString(8, pMyuser.getSecAns());
             
             int lRowCount = lPreStmnt.executeUpdate();
-                if (lRowCount == 0) {
-                    throw new SQLException("Cannot insert records!");
-                }
+            if (lRowCount == 0) {
+                throw new SQLException("Cannot insert records!");
+            }
                 
             lRecordAlreadyExists = true;
         }
@@ -195,20 +197,11 @@ public class MyDB {
         Connection lCnnct = null;
         Statement lStmnt = null;
         //OR
-        PreparedStatement lPreStmnt = null;
         String lQuery = "SELECT * FROM MYUSER WHERE USERID = '000003'";
         try{
             lCnnct = getConnection();            
             //Normal Statement
             lStmnt = lCnnct.createStatement();
-//            System.out.println("\n test before getRecord() execution");
-//            lStmnt.execute(lQuery);
-            
-            //OR PreparedStatement
-//            String lPreQueryStatement = ("SELECT * FROM MYUSER WHERE USERID = ?");
-//            lPreStmnt = lCnnct.prepareStatement(lPreQueryStatement);
-//            lPreStmnt.setString(1, pUserId);
-//            lPreStmnt.executeQuery();
             ResultSet rs = lStmnt.executeQuery(lQuery);
             
             if(rs.next()){
@@ -224,11 +217,7 @@ public class MyDB {
                                "\t" + lPassword + "\t" + lEmail +
                                "\t" + lPhone + "\t" + lAddress +
                                "\t" + lQN + "\t" + lAns);
-            } 
-            
-//             if (lRowCount == 0) {
-//                 throw new SQLException("Cannot get record!");
-//             }
+            }
         }
         catch(SQLException ex){
             while(ex != null){
@@ -258,15 +247,118 @@ public class MyDB {
         return lMyuser;
     }
     
-    public boolean updateRecord(Myuser myuser){
-        return false;
+    public boolean updateRecord(Myuser pMyuser){
+        boolean lRecordExists = false;
+        Connection lCnnct = null;
+        PreparedStatement lPreStmnt = null;
+        String lPreQueryStatement = "UPDATE MYUSER "
+                + "SET NAME = ?, PASSWORD = ?, EMAIL = ?, "
+                + "PHONE = ?, ADDRESS = ?, SECQN = ?, SECANS = ?"
+                + "  WHERE USERID = ? ";
+        
+        
+        // 8 variablaes
+        
+     
+        
+        try{
+            lCnnct = getConnection();            
+            //Normal Statement
+            lPreStmnt = lCnnct.prepareStatement(lPreQueryStatement);
+            
+            lPreStmnt.setString(1, pMyuser.getName());
+            lPreStmnt.setString(2, pMyuser.getPassword());
+            lPreStmnt.setString(3, pMyuser.getEmail());
+            lPreStmnt.setString(4, pMyuser.getPhone());
+            lPreStmnt.setString(5, pMyuser.getAddress());
+            lPreStmnt.setString(6, pMyuser.getSecQn());
+            lPreStmnt.setString(7, pMyuser.getSecAns());
+            lPreStmnt.setString(8, pMyuser.getUserid());
+            
+            
+            //What does this part do???
+            int lRowCount = lPreStmnt.executeUpdate();
+            if (lRowCount == 0) {
+                throw new SQLException("Cannot update record!");
+            }
+                
+            lRecordExists = true;
+                    }
+        catch(SQLException ex){
+            while(ex != null){
+                ex.printStackTrace();
+                ex = ex.getNextException();
+            }
+        }
+        catch(IOException ex){
+            ex.printStackTrace();
+        }
+        finally{
+            if(lPreStmnt != null){
+                try{
+                    lPreStmnt.close();
+                }
+                catch(SQLException ex){
+                }
+            }
+            if(lCnnct != null){
+                try{
+                    lCnnct.close();
+                    return lRecordExists;
+                }
+                catch(SQLException ex){
+                }
+            }
+        }
+        return lRecordExists;
     }
     
-    public boolean deleteRecord(Myuser myuser){
-        return false;
+    public boolean deleteRecord(String pUserId){
+        boolean lRecordExisted = false;
+        Connection lCnnct = null;
+        PreparedStatement lPreStmnt = null;
+        String lPreQueryStmnt = "DELETE FROM MYUSER WHERE USERID = ?";  
+
+        try{
+            lCnnct = getConnection();
+            //Prepared Statement
+            lPreStmnt = lCnnct.prepareStatement(lPreQueryStmnt);            
+            lPreStmnt.setString(1, pUserId);
+//                         
+            int lRowCount = lPreStmnt.executeUpdate();
+            if (lRowCount == 0) {
+                throw new SQLException("Cannot delete record!");
+            }
+            lRecordExisted = true;
+        }
+        catch(SQLException ex){
+            while(ex != null){
+                ex.printStackTrace();
+                ex.getNextException();
+            }
+        }
+        catch(IOException ex){
+            ex.printStackTrace();
+        }
+        finally{
+            
+            if(lPreStmnt != null){
+                try{
+                    lPreStmnt.close();
+                    return lRecordExisted;
+                }
+                catch(SQLException ex){
+                    //Shouldn't there be some content here????
+                    while(ex != null){
+                        ex.printStackTrace();
+                        ex.getNextException();
+                    }
+                }
+            }
+        }
+        
+        return lRecordExisted;
     }
-    
-    
     
 //    public void setMyUser(PreparedStatement pPreStmnt, Myuser pMyuser){
 //            pPreStmnt.setString(1, pMyuser.getUserid());
