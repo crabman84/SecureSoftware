@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -187,26 +188,47 @@ public class MyDB {
         return lRecordAlreadyExists;
     }
     
+    
+    
     public Myuser getRecord(String pUserId) {
         Myuser lMyuser = null;
         Connection lCnnct = null;
         Statement lStmnt = null;
         //OR
         PreparedStatement lPreStmnt = null;
-        
-        
+        String lQuery = "SELECT * FROM MYUSER WHERE USERID = '000003'";
         try{
-            lCnnct = getConnection();
-            
-            System.out.println("\n test before getRecord() execution");
-            
+            lCnnct = getConnection();            
             //Normal Statement
             lStmnt = lCnnct.createStatement();
-            lStmnt.execute("SELECT * FROM TABLE MYUSER WHERE USERID = 000001");
+//            System.out.println("\n test before getRecord() execution");
+//            lStmnt.execute(lQuery);
             
             //OR PreparedStatement
-            String lPreQueryStatement = ("SELECT * FROM TABLE MYUSER WHERE USERID = 000001");
-            lPreStmnt = lCnnct.prepareStatement(lPreQueryStatement);
+//            String lPreQueryStatement = ("SELECT * FROM MYUSER WHERE USERID = ?");
+//            lPreStmnt = lCnnct.prepareStatement(lPreQueryStatement);
+//            lPreStmnt.setString(1, pUserId);
+//            lPreStmnt.executeQuery();
+            ResultSet rs = lStmnt.executeQuery(lQuery);
+            
+            if(rs.next()){
+                String lUserId = rs.getString("USERID");
+                String lName = rs.getString("NAME");
+                String lPassword = rs.getString("PASSWORD");
+                String lEmail = rs.getString("EMAIL");
+                String lPhone = rs.getString("PHONE");
+                String lAddress = rs.getString("ADDRESS");
+                String lQN = rs.getString("SECQN");
+                String lAns = rs.getString("SECANS");
+                System.out.println(lUserId + "\t" + lName +
+                               "\t" + lPassword + "\t" + lEmail +
+                               "\t" + lPhone + "\t" + lAddress +
+                               "\t" + lQN + "\t" + lAns);
+            } 
+            
+//             if (lRowCount == 0) {
+//                 throw new SQLException("Cannot get record!");
+//             }
         }
         catch(SQLException ex){
             while(ex != null){
@@ -243,5 +265,18 @@ public class MyDB {
     public boolean deleteRecord(Myuser myuser){
         return false;
     }
+    
+    
+    
+//    public void setMyUser(PreparedStatement pPreStmnt, Myuser pMyuser){
+//            pPreStmnt.setString(1, pMyuser.getUserid());
+//            pPreStmnt.setString(2, pMyuser.getName());
+//            pPreStmnt.setString(3, pMyuser.getPassword());
+//            pPreStmnt.setString(4, pMyuser.getEmail());
+//            pPreStmnt.setString(5, pMyuser.getPhone());
+//            pPreStmnt.setString(6, pMyuser.getAddress());
+//            pPreStmnt.setString(7, pMyuser.getSecQn());
+//            pPreStmnt.setString(8, pMyuser.getSecAns());
+//    }
     //END: P2.1 task 2
 }

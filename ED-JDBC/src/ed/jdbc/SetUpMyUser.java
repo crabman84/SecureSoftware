@@ -39,7 +39,6 @@ public class SetUpMyUser {
 //        TODO: P2.1 Task 2.2
 //      Get a single record with userId
         String aUserId = "00003";
-        
         mydb.getRecord(aUserId);
 
         //TODO: P2.1 Task 3 
