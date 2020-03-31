@@ -357,15 +357,5 @@ public class MyDB {
         return lRecordExisted;
     }
     
-//    public void setMyUser(PreparedStatement pPreStmnt, Myuser pMyuser){
-//            pPreStmnt.setString(1, pMyuser.getUserid());
-//            pPreStmnt.setString(2, pMyuser.getName());
-//            pPreStmnt.setString(3, pMyuser.getPassword());
-//            pPreStmnt.setString(4, pMyuser.getEmail());
-//            pPreStmnt.setString(5, pMyuser.getPhone());
-//            pPreStmnt.setString(6, pMyuser.getAddress());
-//            pPreStmnt.setString(7, pMyuser.getSecQn());
-//            pPreStmnt.setString(8, pMyuser.getSecAns());
-//    }
-    //END: P2.1 task 2
 }
+
