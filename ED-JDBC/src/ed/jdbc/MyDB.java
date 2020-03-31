@@ -256,11 +256,8 @@ public class MyDB {
                 + "PHONE = ?, ADDRESS = ?, SECQN = ?, SECANS = ?"
                 + "  WHERE USERID = ? ";
         
-        
         // 8 variablaes
-        
-     
-        
+    
         try{
             lCnnct = getConnection();            
             //Normal Statement

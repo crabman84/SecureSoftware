@@ -5,7 +5,12 @@
  */
 package ed.jdbc;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,36 +37,53 @@ public class SetUpMyUser {
         mydb.addRecords(aList);
         
 //        TODO: P2.1 Task 2.1 
-//      Add a single record
-        Myuser aMyuser = prepareSingleMyuserData();
-        mydb.createRecord(aMyuser);
-        
-//        TODO: P2.1 Task 2.2
-//      Get a single record with userId
-        String aUserId = "00003";
-        mydb.getRecord(aUserId);
-        
-//        TODO: P2.1 Task 2.3
-//      Update a single record with userId
-        Myuser aUpdateMyuser = prepareUpdateForSingleMyuserData();
-        boolean checkUpdate = mydb.updateRecord(aUpdateMyuser);
-        System.out.print("\n Updated?:  " + checkUpdate);
-        
-        //        TODO: P2.1 Task 2.4
-//      Delete a single record with userId
-        aUserId = "000001";
-        boolean checkDelete = mydb.deleteRecord(aUserId);
-        System.out.print("\n Deleted?:  " + checkDelete + "\n");
+////      Add a single record
+//        Myuser aMyuser = prepareSingleMyuserData();
+//        mydb.createRecord(aMyuser);
+//        
+////        TODO: P2.1 Task 2.2
+////      Get a single record with userId
+//        String aUserId = "00003";
+//        mydb.getRecord(aUserId);
+//        
+////        TODO: P2.1 Task 2.3
+////      Update a single record with userId
+//        Myuser aUpdateMyuser = prepareUpdateForSingleMyuserData();
+//        boolean checkUpdate = mydb.updateRecord(aUpdateMyuser);
+//        System.out.print("\n Updated?:  " + checkUpdate);
+//        
+//        //        TODO: P2.1 Task 2.4
+////      Delete a single record with userId
+//        aUserId = "000001";
+//        boolean checkDelete = mydb.deleteRecord(aUserId);
+//        System.out.print("\n Deleted?:  " + checkDelete + "\n");
         
         //TODO: P2.1 Task 3 
         //Make client program
+        String querytask = queryMenu(mydb);
+        System.out.println("\n Query user has chosen: " + querytask);
+
         
         //Code here...
         
         //END: P2.1 Task 3
         //
     }
-//        TODO: P2.1 Task 2.1
+    
+   // TODO: P2.1 Task 3: Client Program
+    
+    public static String clientMenu(){
+        String result = "";
+        
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
+        
+        
+        return result;
+    }
+    
+    
+///        TODO: P2.1 Task 2.1
     public static Myuser prepareSingleMyuserData() {
     Myuser lMyuser = new Myuser("000007", "Testie McTester", "987654",
             "test@swin.edu.au", "0418926318", "Swinburne Test",
@@ -72,7 +94,7 @@ public class SetUpMyUser {
     
     //        TODO: P2.1 Task 2.3
     public static Myuser prepareUpdateForSingleMyuserData() {
-    Myuser lMyuser = new Myuser("000007", "Testie McUpdater", "456789",
+    Myuser lMyuser = new Myuser("000004", "Testie McUpdater", "456789",
             "updated@swin.edu.au", "0418926318", "Swinburne Update",
                 "What is my Test?", "To update record database");
     
@@ -106,5 +128,82 @@ public class SetUpMyUser {
         myList.add(myuser5);
         return myList;
     }
+    
+    
+    enum DBQueryEnum {
+        NONE,
+        CREATE,
+        DELETE,
+        GET,
+        UPDATE
+    }
+    
+     public static String queryMenu(MyDB pMyDB) {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String chosenType = "";
+        DBQueryEnum dbEnum = DBQueryEnum.NONE;
+
+        System.out.println("Here are the following database query options \n");
+        System.out.println(" 1: Create a new record in DB \n 2: Delete a current record in DB\n 3: Find a current record in DB \n 4: Update a current record in DB \n 5: Exit from menu\n");
+
+        System.out.println("Please select one of the above options(1-5): ");
+
+        String userInput = "null";
+        int i = 0;
+        try {
+            userInput = br.readLine();
+            i = Integer.parseInt(userInput);
+            if (i >= 1 && i < 5) {
+                dbEnum = DBQueryEnum.values()[i];
+                performChosenTask(dbEnum, pMyDB);
+            }
+            else if(i == 5){
+                System.out.println("You have chosen to EXIT by choosing 5");
+                dbEnum = DBQueryEnum.values()[0];
+            }
+            else {
+                System.out.println("I did not understand your input");
+                dbEnum = DBQueryEnum.values()[0];
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(SetUpMyUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return dbEnum.toString();
+    }
+     
+    public static String performChosenTask(DBQueryEnum pEnum, MyDB pMyDB) {
+        switch(pEnum) {
+            case CREATE:
+                //Create record
+                Myuser aMyuser = prepareSingleMyuserData();
+                pMyDB.createRecord(aMyuser);
+                break;
+            case DELETE:
+                //Delete record
+                String aUserId = "000001";
+                boolean checkDelete = pMyDB.deleteRecord(aUserId);
+                System.out.print("\n Deleted?:  " + checkDelete + "\n");
+                break;
+            case GET:
+                //Get record
+                String bUserId = "000003";
+                pMyDB.getRecord(bUserId);
+                break;
+            case UPDATE:
+                //Update record
+                Myuser aUpdateMyuser = prepareUpdateForSingleMyuserData();
+                boolean checkUpdate = pMyDB.updateRecord(aUpdateMyuser);
+                System.out.print("\n Updated?:  " + checkUpdate);
+                break;
+            default: 
+                    System.out.print("\n Input was not understood");
+                break;
+        }
+        return pEnum.toString();
+    }
+
 
 }
+
+
